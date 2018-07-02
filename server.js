@@ -1,10 +1,10 @@
-import express from 'express';
-import path from 'path';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import axios from 'axios';
-import nodemailer from 'nodemailer';
-import Email from 'email-templates';
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const axios = require('axios');
+const nodemailer = require('nodemailer');
+const Email = reuire('email-templates');
 
 const transporter = nodemailer.createTransport({
 	host: 'server91.web-hosting.com',
