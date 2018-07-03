@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Recaptcha from 'react-recaptcha';
 import axios from 'axios';
 import validator from 'validator';
+import Loader from 'react-loader';
 
 class App extends Component {
 	state = {
@@ -11,7 +12,8 @@ class App extends Component {
 		token: '',
 		error: false,
 		success: false,
-		fieldErrors: {}
+		fieldErrors: {},
+		loading: false
 	};
 
 	validate = () => {
@@ -30,7 +32,7 @@ class App extends Component {
 		if (!(fieldErrors.email || fieldErrors.name || fieldErrors.message)) {
 			this.executeCaptcha();
 		} else {
-			this.setState({ fieldErrors });
+			this.setState({ fieldErrors, loading: false });
 		}
 	};
 	onChangeHandler = e => {
@@ -39,12 +41,13 @@ class App extends Component {
 		});
 	};
 	verifyCallback = async token => {
+		this.setState({ loading: true });
 		const resp = await axios.post('https://www.sornyei.com/contact', {
 			...this.state,
 			token
 		});
 		if (!resp.status === 200) {
-			this.setState({ error: true });
+			this.setState({ error: true, loading: false });
 		} else {
 			this.setState({
 				name: '',
@@ -53,7 +56,8 @@ class App extends Component {
 				token: '',
 				error: false,
 				success: true,
-				fieldErrors: {}
+				fieldErrors: {},
+				loading: false
 			});
 		}
 	};
@@ -112,50 +116,52 @@ class App extends Component {
 							<div
 								className="contact_form animated animated_scroll fadeInUp"
 								style={{ animationDelay: '0.4s' }}>
-								<form>
-									<input
-										placeholder="Name"
-										name="name"
-										type="text"
-										className={fieldErrors.name ? 'form-control errorForm' : 'form-control'}
-										value={name}
-										onChange={this.onChangeHandler}
-									/>
-									<input
-										placeholder="E-mail"
-										name="email"
-										type="email"
-										value={email}
-										className={fieldErrors.email ? 'form-control errorForm' : 'form-control'}
-										onChange={this.onChangeHandler}
-									/>
-									<textarea
-										placeholder="Message"
-										name="message"
-										className={fieldErrors.message ? 'form-control errorForm' : 'form-control'}
-										value={message}
-										onChange={this.onChangeHandler}
-									/>
-									<button className="submit btn" onClick={this.onSubmit}>
-										send message
-									</button>
-									<Recaptcha
-										ref={ref => (this.recaptcha = ref)}
-										sitekey="6Lcx62EUAAAAAPANe9dpXqmNX2_yA11We4S0CC5U"
-										size="invisible"
-										render="explicit"
-										onloadCallback={() => console.log('done')}
-										verifyCallback={this.verifyCallback}
-									/>
-									{/* <!--Contact form message--> */}
-									<div className="msg_success" style={success ? { display: 'block' } : {}}>
-										<p>Your message has been sent. Thank you!</p>
-									</div>
-									<div className="msg_error" style={error ? { display: 'block' } : {}}>
-										<p>Sorry your message can not be sent.</p>
-									</div>
-									{/* <!--End contact form message--> */}
-								</form>
+								<Loader loaded={!this.state.loading}>
+									<form>
+										<input
+											placeholder="Name"
+											name="name"
+											type="text"
+											className={fieldErrors.name ? 'form-control errorForm' : 'form-control'}
+											value={name}
+											onChange={this.onChangeHandler}
+										/>
+										<input
+											placeholder="E-mail"
+											name="email"
+											type="email"
+											value={email}
+											className={fieldErrors.email ? 'form-control errorForm' : 'form-control'}
+											onChange={this.onChangeHandler}
+										/>
+										<textarea
+											placeholder="Message"
+											name="message"
+											className={fieldErrors.message ? 'form-control errorForm' : 'form-control'}
+											value={message}
+											onChange={this.onChangeHandler}
+										/>
+										<button className="submit btn" onClick={this.onSubmit}>
+											send message
+										</button>
+										<Recaptcha
+											ref={ref => (this.recaptcha = ref)}
+											sitekey="6Lcx62EUAAAAAPANe9dpXqmNX2_yA11We4S0CC5U"
+											size="invisible"
+											render="explicit"
+											onloadCallback={() => console.log('done')}
+											verifyCallback={this.verifyCallback}
+										/>
+										{/* <!--Contact form message--> */}
+										<div className="msg_success" style={success ? { display: 'block' } : {}}>
+											<p>Your message has been sent. Thank you!</p>
+										</div>
+										<div className="msg_error" style={error ? { display: 'block' } : {}}>
+											<p>Sorry your message can not be sent.</p>
+										</div>
+										{/* <!--End contact form message--> */}
+									</form>
+								</Loader>
 							</div>
 						</div>
 						{/* <!--.col-md-10--> */}
