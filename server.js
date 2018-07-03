@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const nodemailer = require('nodemailer');
-const Email = reuire('email-templates');
+const Email = require('email-templates');
 
 const transporter = nodemailer.createTransport({
 	host: 'server91.web-hosting.com',
@@ -36,7 +36,7 @@ app.use(cors());
 
 app.post('/contact', async (req, res, next) => {
 	const resp = await axios.get(
-		`https://www.google.com/recaptcha/api/siteverify?secret=6LeWyGEUAAAAAHhIqdWG3EFjW1Ug3x8brYqb1Dcc&response=${
+		`https://www.google.com/recaptcha/api/siteverify?secret=6Lcx62EUAAAAAO610LZT7IXkFcvgnJqnrXqxOLmA&response=${
 			req.body.token
 		}`
 	);
@@ -76,6 +76,6 @@ app.get('*', (req, res, next) => {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.listen(4000, () => {
+app.listen(4040, () => {
 	console.log('Server listening on port 4000');
 });

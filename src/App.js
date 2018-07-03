@@ -39,7 +39,7 @@ class App extends Component {
 		});
 	};
 	verifyCallback = async token => {
-		const resp = await axios.post('http://localhost:4000/contact', {
+		const resp = await axios.post('https://www.sornyei.com/contact', {
 			...this.state,
 			token
 		});
@@ -141,7 +141,7 @@ class App extends Component {
 									</button>
 									<Recaptcha
 										ref={ref => (this.recaptcha = ref)}
-										sitekey="6LeWyGEUAAAAAMcfhbhMA6AxyCVoFLb6xX-JG9UJ"
+										sitekey="6Lcx62EUAAAAAPANe9dpXqmNX2_yA11We4S0CC5U"
 										size="invisible"
 										render="explicit"
 										onloadCallback={() => console.log('done')}
